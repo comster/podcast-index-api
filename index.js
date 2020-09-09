@@ -21,8 +21,7 @@ const PATH_EPISODES_BY_ITUNES_ID = 'episodes/byitunesid'
 
 const PATH_RECENT_EPISODES = 'recent/episodes'
 
-const qs = (o) =>
-    '?' + querystring.stringify(o, null, null)
+const qs = (o) => '?' + querystring.stringify(o)
 const withResponse = (response) => response.body
 
 module.exports = (key, secret, userAgent) => {
@@ -56,9 +55,7 @@ module.exports = (key, secret, userAgent) => {
     return {
         api,
         searchByTerm: async (q) => {
-            const response = await api(
-                PATH_SEARCH_BY_TERM + qs({ q: q })
-            )
+            const response = await api(PATH_SEARCH_BY_TERM + qs({ q: q }))
             return withResponse(response)
         },
         podcastsByFeedUrl: async (feedUrl) => {

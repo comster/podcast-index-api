@@ -14,9 +14,13 @@ test:
     - npx prettier --check .
     - npm test
   coverage: /All files\s*\|\s*([\d\.]+)/
+  except:
+    - tags
 
 deploy:
   stage: deploy
   script:
     - echo '//registry.npmjs.org/:_authToken=${NPM_TOKEN}'>.npmrc
     - npm publish
+  except:
+    - tags
