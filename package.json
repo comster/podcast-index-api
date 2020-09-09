@@ -1,41 +1,41 @@
 {
-  "name": "podcast-index-api",
-  "version": "1.0.1",
-  "description": "JS lib for the Podcast Index API",
-  "main": "index.js",
-  "directories": {
-    "test": "test"
-  },
-  "dependencies": {},
-  "devDependencies": {},
-  "scripts": {
-    "test": "jest --coverage"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+ssh://git@gitlab.com/comster/podcast-index-api.git"
-  },
-  "keywords": [
-    "API",
-    "Podcast",
-    "Directory",
-    "Podcasts",
-    "Search"
-  ],
-  "author": {
-    "name": "Jeff Pelton",
-    "email": "jeff@jeffpelton.com",
-    "url": "https://www.jeffpelton.com/"
-  },
-  "license": "MIT",
-  "bugs": {
-    "url": "https://gitlab.com/comster/podcast-index-api/issues"
-  },
-  "homepage": "https://gitlab.com/comster/podcast-index-api#readme",
-  "dependencies": {
-    "got": "^11.6.0"
-  },
-  "devDependencies": {
-    "jest": "^26.4.2"
-  }
+    "name": "podcast-index-api",
+    "version": "1.0.1",
+    "description": "JS lib for the Podcast Index API",
+    "main": "index.js",
+    "directories": {
+        "test": "test"
+    },
+    "dependencies": {
+        "got": "^11.6.0"
+    },
+    "devDependencies": {
+        "jest": "^26.4.2",
+        "prettier": "2.1.1"
+    },
+    "scripts": {
+        "test": "jest --coverage",
+        "format": "npx prettier --write ."
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+ssh://git@gitlab.com/comster/podcast-index-api.git"
+    },
+    "keywords": [
+        "API",
+        "Podcast",
+        "Directory",
+        "Podcasts",
+        "Search"
+    ],
+    "author": {
+        "name": "Jeff Pelton",
+        "email": "jeff@jeffpelton.com",
+        "url": "https://www.jeffpelton.com/"
+    },
+    "license": "MIT",
+    "bugs": {
+        "url": "https://gitlab.com/comster/podcast-index-api/issues"
+    },
+    "homepage": "https://gitlab.com/comster/podcast-index-api#readme"
 }

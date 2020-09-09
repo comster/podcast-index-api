@@ -11,6 +11,7 @@ cache:
 test:
   script:
     - npm install
+    - npx prettier --check .
     - npm test
   coverage: /All files\s*\|\s*([\d\.]+)/
 
