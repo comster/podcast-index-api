@@ -1,6 +1,6 @@
 {
   "name": "podcast-index-api",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "JS lib for the Podcast Index API",
   "main": "index.js",
   "directories": {

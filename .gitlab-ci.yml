@@ -12,7 +12,7 @@ test:
   script:
     - npm install
     - npm test
-  coverage: /All files[^|]*\|[^|]*\s+([\d\.]+)/
+  coverage: /All files\s*\|\s*([\d\.]+)/
 
 deploy:
   stage: deploy
