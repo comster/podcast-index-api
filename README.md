@@ -2,8 +2,8 @@
 
 > A Podcast Index API library for Node.js
 
-![Build Status](https://gitlab.com/comster/podcast-index-api/badges/master/pipeline.svg?ignore_skipped=true)
-![coverage](https://gitlab.com/comster/podcast-index-api/badges/master/coverage.svg?job=coverage)
+[![pipeline status](https://gitlab.com/comster/podcast-index-api/badges/master/pipeline.svg)](https://gitlab.com/comster/podcast-index-api/-/commits/master)
+[![coverage report](https://gitlab.com/comster/podcast-index-api/badges/master/coverage.svg)](https://gitlab.com/comster/podcast-index-api/-/commits/master)
 [![Downloads](https://img.shields.io/npm/dm/podcast-index-api.svg)](https://npmjs.com/podcast-index-api)
 [![Install size](https://packagephobia.now.sh/badge?p=podcast-index-api)](https://packagephobia.now.sh/result?p=podcast-index-api)
 

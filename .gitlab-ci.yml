@@ -12,6 +12,7 @@ test:
   script:
     - npm install
     - npm test
+  coverage: /All\sfiles.*?\s+(\d+.\d+)/
 
 deploy:
   stage: deploy
