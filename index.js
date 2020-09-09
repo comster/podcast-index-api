@@ -22,7 +22,7 @@ const PATH_EPISODES_BY_ITUNES_ID = 'episodes/byitunesid'
 const PATH_RECENT_EPISODES = 'recent/episodes'
 
 const qs = (o) =>
-    '?' + querystring.stringify(o, null, null, { encodeURIComponent: (s) => s })
+    '?' + querystring.stringify(o, null, null)
 const withResponse = (response) => response.body
 
 module.exports = (key, secret, userAgent) => {
@@ -57,7 +57,7 @@ module.exports = (key, secret, userAgent) => {
         api,
         searchByTerm: async (q) => {
             const response = await api(
-                PATH_SEARCH_BY_TERM + qs({ q: q.split(' ').join('+') })
+                PATH_SEARCH_BY_TERM + qs({ q: q })
             )
             return withResponse(response)
         },

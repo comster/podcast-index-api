@@ -15,11 +15,12 @@
     },
     "scripts": {
         "test": "jest --coverage",
-        "format": "npx prettier --write ."
+        "format": "npx prettier --write .",
+        "tag": "npm version patch && git push && git push --tags"
     },
     "repository": {
         "type": "git",
-        "url": "git+ssh://git@gitlab.com/comster/podcast-index-api.git"
+        "url": "git+ssh://git@github.com/comster/podcast-index-api.git"
     },
     "keywords": [
         "API",
@@ -35,7 +36,7 @@
     },
     "license": "MIT",
     "bugs": {
-        "url": "https://gitlab.com/comster/podcast-index-api/issues"
+        "url": "https://github.com/comster/podcast-index-api/issues"
     },
-    "homepage": "https://gitlab.com/comster/podcast-index-api#readme"
+    "homepage": "https://github.com/comster/podcast-index-api"
 }

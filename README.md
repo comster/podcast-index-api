@@ -8,7 +8,7 @@
 [![npm](https://img.shields.io/npm/v/podcast-index-api?style=plastic)](https://npmjs.com/podcast-index-api)
 [![Downloads](https://img.shields.io/npm/dw/podcast-index-api.svg)](https://npmjs.com/podcast-index-api)
 
-[Source](https://gitlab.com/comster/podcast-index-api)
+[Homepage](https://comster.github.io/podcast-index-api/) | [Source](https://github.com/comster/podcast-index-api) | [npm](https://npmjs.com/podcast-index-api)
 
 ## Installation
 
