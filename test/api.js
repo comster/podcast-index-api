@@ -1,3 +1,5 @@
+jest.setTimeout(60000)
+
 const lib = require('../index.js')
 const api = lib(
     process.env.PODCASTINDEX_API_KEY,
