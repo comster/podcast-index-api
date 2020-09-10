@@ -19,6 +19,7 @@ const PATH_EPISODES_BY_FEED_ID = 'episodes/byfeedid'
 const PATH_EPISODES_BY_FEED_URL = 'episodes/byfeedurl'
 const PATH_EPISODES_BY_ITUNES_ID = 'episodes/byitunesid'
 
+const PATH_RECENT_FEEDS = 'recent/feeds'
 const PATH_RECENT_EPISODES = 'recent/episodes'
 
 const qs = (o) => '?' + querystring.stringify(o)
@@ -100,15 +101,27 @@ module.exports = (key, secret, userAgent) => {
             )
             return withResponse(response)
         },
-        recentEpisodes: async (max = 10, excludeString = null) => {
+        recentFeeds: async (max = 40, since = null) => {
+            const response = await api(
+                PATH_RECENT_FEEDS +
+                    qs({
+                        max: max,
+                        since: since ? since : null,
+                    })
+            )
+            return withResponse(response)
+        },
+        recentEpisodes: async (
+            max = 10,
+            excludeString = null,
+            excludeBlank = null
+        ) => {
             const response = await api(
                 PATH_RECENT_EPISODES +
                     qs({
                         max: max,
-                        excludeString: excludeString
-                            ? '&excludeString=' +
-                              encodeURIComponent(excludeString)
-                            : '',
+                        excludeString: excludeString ? excludeString : null,
+                        excludeBlank: excludeBlank ? excludeBlank : null,
                     })
             )
             return withResponse(response)
