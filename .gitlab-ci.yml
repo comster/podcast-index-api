@@ -16,6 +16,7 @@ test:
   coverage: /All files\s*\|\s*([\d\.]+)/
   except:
     - tags
+  allow_failure: true
 
 deploy:
   stage: deploy
