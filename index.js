@@ -9,21 +9,35 @@ const querystring = require('querystring')
 const BASE_API_URL = 'https://api.podcastindex.org/api/1.0/'
 
 const PATH_SEARCH_BY_TERM = 'search/byterm'
-
-const PATH_PODCASTS_BY_FEED_URL = 'podcasts/byfeedurl'
-const PATH_PODCASTS_BY_FEED_ID = 'podcasts/byfeedid'
-const PATH_PODCASTS_BY_ITUNES_ID = 'podcasts/byitunesid'
 const PATH_ADD_BY_FEED_URL = 'add/byfeedurl'
-
 const PATH_EPISODES_BY_FEED_ID = 'episodes/byfeedid'
 const PATH_EPISODES_BY_FEED_URL = 'episodes/byfeedurl'
 const PATH_EPISODES_BY_ITUNES_ID = 'episodes/byitunesid'
-
+const PATH_PODCASTS_BY_FEED_URL = 'podcasts/byfeedurl'
+const PATH_PODCASTS_BY_FEED_ID = 'podcasts/byfeedid'
+const PATH_PODCASTS_BY_ITUNES_ID = 'podcasts/byitunesid'
 const PATH_RECENT_FEEDS = 'recent/feeds'
 const PATH_RECENT_EPISODES = 'recent/episodes'
 
 const qs = (o) => '?' + querystring.stringify(o)
-const withResponse = (response) => response.body
+
+const withResponse = (response) => {
+    // Check for success or failure and create a predictable error response
+    let body = response.body
+    // if response.statusCode == 200?
+    if(body.hasOwnProperty('status') && body.status === 'false') {
+        // Failed
+        if(body.hasOwnProperty('description')) {
+            // Error message from server API
+            throw { message: body.description, code: response.statusCode }
+        } else {
+            throw { message: 'Request failed.', code: response.statusCode }
+        }
+    } else {
+        // Succcess // 200
+        return body
+    }
+}
 
 module.exports = (key, secret, userAgent) => {
     if (!key || !secret) {
@@ -35,6 +49,7 @@ module.exports = (key, secret, userAgent) => {
     const api = got.extend({
         responseType: 'json',
         prefixUrl: BASE_API_URL,
+        throwHttpErrors: false,
         hooks: {
             beforeRequest: [
                 (options) => {

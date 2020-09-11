@@ -1,4 +1,4 @@
-jest.setTimeout(60000)
+jest.setTimeout(10000)
 
 const lib = require('../index.js')
 const api = lib(
@@ -12,6 +12,7 @@ const FEED_ID = 550168
 const FEED_ITUNES_ID = 360084272
 const FEED_TITLE = 'The Joe Rogan Experience'
 const FEED_URL = 'http://joeroganexp.joerogan.libsynpro.com/rss'
+const FEED_URL_NOT_FOUND = 'http://www.google.com/'
 const RECENT_FEEDS_COUNT = 3
 const RECENT_EPISODES_COUNT = 3
 const RECENT_EPISODES_EXCLUDE = 'news'
@@ -80,6 +81,15 @@ it('Podcasts By Feed URL', async () => {
     expect(results).toHaveProperty('query.url', FEED_URL)
     expect(results.feed.id).toEqual(FEED_ID)
     expect(results.feed.itunesId).toEqual(FEED_ITUNES_ID)
+})
+
+it('Podcasts By Feed URL not found', async () => {
+    expect.assertions(1)
+    try {
+        const results = await api.podcastsByFeedUrl(FEED_URL_NOT_FOUND)
+    } catch(e) {
+        expect(e.code).toEqual(400)
+    }
 })
 
 it('Podcasts By Feed ID', async () => {

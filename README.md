@@ -1,4 +1,4 @@
-# Podcast Index API
+# Podcast Index API Javascript library
 
 > A Podcast Index API library for Node.js
 
