@@ -25,9 +25,9 @@ const withResponse = (response) => {
     // Check for success or failure and create a predictable error response
     let body = response.body
     // if response.statusCode == 200?
-    if(body.hasOwnProperty('status') && body.status === 'false') {
+    if (body.hasOwnProperty('status') && body.status === 'false') {
         // Failed
-        if(body.hasOwnProperty('description')) {
+        if (body.hasOwnProperty('description')) {
             // Error message from server API
             throw { message: body.description, code: response.statusCode }
         } else {

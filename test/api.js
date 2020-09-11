@@ -87,7 +87,7 @@ it('Podcasts By Feed URL not found', async () => {
     expect.assertions(1)
     try {
         const results = await api.podcastsByFeedUrl(FEED_URL_NOT_FOUND)
-    } catch(e) {
+    } catch (e) {
         expect(e.code).toEqual(400)
     }
 })
