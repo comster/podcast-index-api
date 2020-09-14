@@ -24,8 +24,9 @@ it('Requires API credentials', () => {
 })
 
 it('Search by term (async)', async () => {
-    expect.assertions(5)
+    expect.assertions(6)
     const results = await api.searchByTerm(SEARCH_TERM)
+    expect(results.status).toEqual('true')
     expect(results.feeds.length).toBeGreaterThan(0)
     expect(results).toHaveProperty('query', SEARCH_TERM)
     expect(results).toHaveProperty('feeds')
@@ -34,8 +35,9 @@ it('Search by term (async)', async () => {
 })
 
 it('Search by term (promise)', async () => {
-    expect.assertions(5)
+    expect.assertions(6)
     return api.searchByTerm(SEARCH_TERM).then((results) => {
+        expect(results.status).toEqual('true')
         expect(results.feeds.length).toBeGreaterThan(0)
         expect(results).toHaveProperty('query', SEARCH_TERM)
         expect(results).toHaveProperty('feeds')
@@ -44,11 +46,17 @@ it('Search by term (promise)', async () => {
     })
 })
 
-// it('Add feed by URL', async () => {
-//     const results = await api.addByFeedUrl(FEED_URL)
+it('Add feed by URL', async () => {
+    const results = await api.addByFeedUrl(FEED_URL)
+    expect.assertions(1)
+    expect(results.status).toEqual('true')
+})
+
+// it('Add feed by iTunes ID', async () => {
+//     const results = await api.addByItunesId(FEED_ITUNES_ID)
 //     console.log(results)
 //     expect.assertions(1)
-//     // expect(results.length).toBeGreaterThan(0)
+//     expect(results.status).toEqual('true')
 // })
 
 it('Episodes By Feed Id', async () => {

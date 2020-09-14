@@ -10,6 +10,7 @@ const BASE_API_URL = 'https://api.podcastindex.org/api/1.0/'
 
 const PATH_SEARCH_BY_TERM = 'search/byterm'
 const PATH_ADD_BY_FEED_URL = 'add/byfeedurl'
+const PATH_ADD_BY_ITUNES_ID = 'add/byitunesid'
 const PATH_EPISODES_BY_FEED_ID = 'episodes/byfeedid'
 const PATH_EPISODES_BY_FEED_URL = 'episodes/byfeedurl'
 const PATH_EPISODES_BY_ITUNES_ID = 'episodes/byitunesid'
@@ -25,7 +26,10 @@ const withResponse = (response) => {
     // Check for success or failure and create a predictable error response
     let body = response.body
     // if response.statusCode == 200?
-    if (body.hasOwnProperty('status') && body.status === 'false') {
+    if (
+        response.statusCode == 500 ||
+        (body.hasOwnProperty('status') && body.status === 'false')
+    ) {
         // Failed
         if (body.hasOwnProperty('description')) {
             // Error message from server API
@@ -95,6 +99,12 @@ module.exports = (key, secret, userAgent) => {
         addByFeedUrl: async (feedUrl) => {
             const response = await api(
                 PATH_ADD_BY_FEED_URL + qs({ url: feedUrl })
+            )
+            return withResponse(response)
+        },
+        addByItunesId: async (itunesId) => {
+            const response = await api(
+                PATH_ADD_BY_ITUNES_ID + qs({ id: itunesId })
             )
             return withResponse(response)
         },
