@@ -14,6 +14,7 @@ const PATH_ADD_BY_ITUNES_ID = 'add/byitunesid'
 const PATH_EPISODES_BY_FEED_ID = 'episodes/byfeedid'
 const PATH_EPISODES_BY_FEED_URL = 'episodes/byfeedurl'
 const PATH_EPISODES_BY_ITUNES_ID = 'episodes/byitunesid'
+const PATH_EPISODES_BY_ID = 'episodes/byid'
 const PATH_PODCASTS_BY_FEED_URL = 'podcasts/byfeedurl'
 const PATH_PODCASTS_BY_FEED_ID = 'podcasts/byfeedid'
 const PATH_PODCASTS_BY_ITUNES_ID = 'podcasts/byitunesid'
@@ -124,6 +125,10 @@ module.exports = (key, secret, userAgent) => {
             const response = await api(
                 PATH_EPISODES_BY_ITUNES_ID + qs({ id: itunesId })
             )
+            return withResponse(response)
+        },
+        episodesById: async (id) => {
+            const response = await api(PATH_EPISODES_BY_ID + qs({ id: id }))
             return withResponse(response)
         },
         recentFeeds: async (max = 40, since = null) => {

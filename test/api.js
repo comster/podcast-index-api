@@ -13,6 +13,7 @@ const FEED_ITUNES_ID = 360084272
 const FEED_TITLE = 'The Joe Rogan Experience'
 const FEED_URL = 'http://joeroganexp.joerogan.libsynpro.com/rss'
 const FEED_URL_NOT_FOUND = 'http://www.google.com/'
+const EPISODE_ID = 16795090
 const RECENT_FEEDS_COUNT = 3
 const RECENT_EPISODES_COUNT = 3
 const RECENT_EPISODES_EXCLUDE = 'news'
@@ -81,6 +82,13 @@ it('Episodes By Feed iTunes ID', async () => {
     expect(results.items.length).toBeGreaterThan(0)
     expect(results).toHaveProperty('query', FEED_ITUNES_ID.toString())
     expect(results.items[0].feedId).toEqual(FEED_ID)
+})
+
+it('Episodes By ID', async () => {
+    expect.assertions(2)
+    const results = await api.episodesById(EPISODE_ID)
+    expect(results).toHaveProperty('query', EPISODE_ID.toString())
+    expect(results.episode.id).toEqual(EPISODE_ID)
 })
 
 it('Podcasts By Feed URL', async () => {
