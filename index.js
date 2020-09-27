@@ -131,12 +131,13 @@ module.exports = (key, secret, userAgent) => {
             const response = await api(PATH_EPISODES_BY_ID + qs({ id: id }))
             return withResponse(response)
         },
-        recentFeeds: async (max = 40, since = null) => {
+        recentFeeds: async (max = 40, since = null, cat = null) => {
             const response = await api(
                 PATH_RECENT_FEEDS +
                     qs({
                         max: max,
                         since: since ? since : null,
+                        cat: cat,
                     })
             )
             return withResponse(response)
