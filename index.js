@@ -15,11 +15,13 @@ const PATH_EPISODES_BY_FEED_ID = 'episodes/byfeedid'
 const PATH_EPISODES_BY_FEED_URL = 'episodes/byfeedurl'
 const PATH_EPISODES_BY_ITUNES_ID = 'episodes/byitunesid'
 const PATH_EPISODES_BY_ID = 'episodes/byid'
+const PATH_EPISODES_RANDOM = 'episodes/random'
 const PATH_PODCASTS_BY_FEED_URL = 'podcasts/byfeedurl'
 const PATH_PODCASTS_BY_FEED_ID = 'podcasts/byfeedid'
 const PATH_PODCASTS_BY_ITUNES_ID = 'podcasts/byitunesid'
 const PATH_RECENT_FEEDS = 'recent/feeds'
 const PATH_RECENT_EPISODES = 'recent/episodes'
+const PATH_RECENT_NEWFEEDS = 'recent/newfeeds'
 
 const qs = (o) => '?' + querystring.stringify(o)
 
@@ -131,13 +133,23 @@ module.exports = (key, secret, userAgent) => {
             const response = await api(PATH_EPISODES_BY_ID + qs({ id: id }))
             return withResponse(response)
         },
-        recentFeeds: async (max = 40, since = null, cat = null) => {
+        episodesRandom: async (max = 1) => {
+            const response = await api(PATH_EPISODES_RANDOM + qs({ max: max }))
+            return withResponse(response)
+        },
+        recentFeeds: async (
+            max = 40,
+            since = null,
+            cat = null,
+            lang = null
+        ) => {
             const response = await api(
                 PATH_RECENT_FEEDS +
                     qs({
                         max: max,
-                        since: since ? since : null,
+                        since: since,
                         cat: cat,
+                        lang: lang,
                     })
             )
             return withResponse(response)
@@ -155,6 +167,10 @@ module.exports = (key, secret, userAgent) => {
                         excludeBlank: excludeBlank ? excludeBlank : null,
                     })
             )
+            return withResponse(response)
+        },
+        recentNewFeeds: async () => {
+            const response = await api(PATH_RECENT_NEWFEEDS)
             return withResponse(response)
         },
     }
