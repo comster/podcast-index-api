@@ -47,11 +47,11 @@ it('Search by term (promise)', async () => {
     })
 })
 
-it('Add feed by URL', async () => {
-    const results = await api.addByFeedUrl(FEED_URL)
-    expect.assertions(1)
-    expect(results.status).toEqual('true')
-})
+// it('Add feed by URL', async () => {
+//     const results = await api.addByFeedUrl(FEED_URL)
+//     expect.assertions(1)
+//     expect(results.status).toEqual('true')
+// })
 
 // it('Add feed by iTunes ID', async () => {
 //     const results = await api.addByItunesId(FEED_ITUNES_ID)
@@ -184,4 +184,11 @@ it('Recent New Feeds', async () => {
     expect.assertions(1)
     const results = await api.recentNewFeeds()
     expect(results).toHaveProperty('status', 'true')
+})
+
+it('Stats Current', async () => {
+    expect.assertions(2)
+    const results = await api.statsCurrent()
+    expect(results).toHaveProperty('status', 'true')
+    expect(results.stats).toHaveProperty('feedCountTotal')
 })
