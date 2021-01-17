@@ -4,6 +4,7 @@ const querystring = require('querystring')
 
 //
 // https://api.podcastindex.org/developer_docs
+// updated: https://podcastindex-org.github.io/docs-api/
 //
 
 const BASE_API_URL = 'https://api.podcastindex.org/api/1.0/'
@@ -22,6 +23,7 @@ const PATH_PODCASTS_BY_ITUNES_ID = 'podcasts/byitunesid'
 const PATH_RECENT_FEEDS = 'recent/feeds'
 const PATH_RECENT_EPISODES = 'recent/episodes'
 const PATH_RECENT_NEWFEEDS = 'recent/newfeeds'
+const PATH_STATS_CURRENT = 'stats/current'
 
 const qs = (o) => '?' + querystring.stringify(o)
 
@@ -171,6 +173,10 @@ module.exports = (key, secret, userAgent) => {
         },
         recentNewFeeds: async () => {
             const response = await api(PATH_RECENT_NEWFEEDS)
+            return withResponse(response)
+        },
+        statsCurrent: async () => {
+            const response = await api(PATH_STATS_CURRENT)
             return withResponse(response)
         },
     }
