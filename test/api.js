@@ -8,11 +8,14 @@ const api = lib(
 const apiBadCreds = lib('ABC', '123')
 
 const SEARCH_TERM = 'Joe Rogan Experience'
+const SEARCH_PERSON = 'Joe Rogan'
 const FEED_ID = 550168
+const FEED_ID_VALUE = 920666
 const FEED_ITUNES_ID = 360084272
 const FEED_TITLE = 'The Joe Rogan Experience'
 const FEED_URL = 'http://joeroganexp.joerogan.libsynpro.com/rss'
 const FEED_URL_NOT_FOUND = 'http://www.google.com/'
+const FEED_URL_VALUE = 'https://mp3s.nashownotes.com/pc20rss.xml'
 const EPISODE_ID = 16795090
 const RECENT_FEEDS_COUNT = 3
 const RECENT_EPISODES_COUNT = 3
@@ -22,6 +25,17 @@ it('Requires API credentials', () => {
     expect(() => {
         const apiNoCreds = lib()
     }).toThrow()
+})
+
+it('Custom', async () => {
+    expect.assertions(4)
+    const results = await api.custom('search/byterm', {
+        q: SEARCH_TERM,
+    })
+    expect(results.status).toEqual('true')
+    expect(results.feeds.length).toBeGreaterThan(0)
+    expect(results).toHaveProperty('query', SEARCH_TERM)
+    expect(results).toHaveProperty('feeds')
 })
 
 it('Search by term (async)', async () => {
@@ -45,6 +59,27 @@ it('Search by term (promise)', async () => {
         // expect(results.feeds[0].id).toEqual(FEED_ID)
         // expect(results.feeds[0].title).toEqual(FEED_TITLE)
     })
+})
+
+it('Search by term (value)', async () => {
+    expect.assertions(4)
+    const searchTerm = 'no agenda'
+    const results = await api.searchByTerm(searchTerm, 'lightning')
+    expect(results.status).toEqual('true')
+    expect(results.feeds.length).toBeGreaterThan(0)
+    expect(results).toHaveProperty('query', searchTerm)
+    expect(results).toHaveProperty('feeds')
+    // expect(results.feeds[0].id).toEqual(FEED_ID)
+    // expect(results.feeds[0].title).toEqual(FEED_TITLE)
+})
+
+it('Search episodes by person', async () => {
+    expect.assertions(4)
+    const results = await api.searchEpisodesByPerson(SEARCH_PERSON)
+    expect(results.status).toEqual('true')
+    expect(results.items.length).toBeGreaterThan(0)
+    expect(results).toHaveProperty('query', SEARCH_PERSON)
+    expect(results).toHaveProperty('items')
 })
 
 // it('Add feed by URL', async () => {
@@ -133,6 +168,30 @@ it('Podcasts By Feed iTunes ID', async () => {
     expect(results.feed.itunesId).toEqual(FEED_ITUNES_ID)
 })
 
+it('Podcasts By tag', async () => {
+    expect.assertions(3)
+    const results = await api.podcastsByTag()
+    expect(results.status).toEqual('true')
+    expect(results.feeds.length).toBeGreaterThan(1)
+    expect(results.count).toBeGreaterThan(1)
+})
+
+it('Podcasts trending', async () => {
+    expect.assertions(3)
+    const results = await api.podcastsTrending()
+    expect(results.status).toEqual('true')
+    expect(results.feeds.length).toEqual(10)
+    expect(results.count).toEqual(10)
+})
+
+it('Podcasts dead', async () => {
+    expect.assertions(3)
+    const results = await api.podcastsDead()
+    expect(results.status).toEqual('true')
+    expect(results.feeds.length).toBeGreaterThan(1)
+    expect(results.count).toBeGreaterThan(1)
+})
+
 it('Recent Feeds', async () => {
     expect.assertions(1)
     const results = await api.recentFeeds(RECENT_FEEDS_COUNT, null, 'news')
@@ -186,9 +245,48 @@ it('Recent New Feeds', async () => {
     expect(results).toHaveProperty('status', 'true')
 })
 
+it('Recent soundbites', async () => {
+    expect.assertions(3)
+    const results = await api.recentSoundbites(20)
+    expect(results).toHaveProperty('status', 'true')
+    expect(results.items.length).toBeGreaterThan(1)
+    expect(results.count).toBeGreaterThan(1)
+})
+
+it('Value By Feed URL', async () => {
+    expect.assertions(2)
+    const results = await api.valueByFeedUrl(FEED_URL_VALUE)
+    expect(results).toHaveProperty('query.url', FEED_URL_VALUE)
+    expect(results).toHaveProperty('value')
+})
+
+it('Value By Feed ID', async () => {
+    expect.assertions(2)
+    const results = await api.valueByFeedId(FEED_ID_VALUE)
+    expect(results).toHaveProperty('query.id', FEED_ID_VALUE.toString())
+    expect(results).toHaveProperty('value')
+})
+
 it('Stats Current', async () => {
     expect.assertions(2)
     const results = await api.statsCurrent()
     expect(results).toHaveProperty('status', 'true')
     expect(results.stats).toHaveProperty('feedCountTotal')
 })
+
+it('Categories list', async () => {
+    expect.assertions(5)
+    const results = await api.categoriesList()
+    expect(results).toHaveProperty('status', 'true')
+    expect(results.feeds.length).toBeGreaterThan(10)
+    expect(results.count).toBeGreaterThan(10)
+    expect(results.feeds[0]).toHaveProperty('id', 1)
+    expect(results.feeds[0]).toHaveProperty('name', 'Arts')
+})
+
+// it('Hub pun notify', async () => {
+//     expect.assertions(2)
+//     const results = await api.hubPubNotify(75075)
+//     expect(results).toHaveProperty('status', 'true')
+//     expect(results).toHaveProperty('description', 'Feed marked for immediate update.')
+// })
