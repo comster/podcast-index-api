@@ -44,11 +44,13 @@ Using Promise
         -   `custom(path: String, queries: Object)`
 -   Search
     -   `searchByTerm(q: String, val: String, clean: Boolean, fullText: Boolean)`
+    -   `searchByTitle(q: String, val: String, clean: Boolean, fullText: Boolean)`
     -   `searchEpisodesByPerson(q: String, fullText: Boolean)`
 -   Podcasts
     -   `podcastsByFeedUrl(feedUrl: String)`
     -   `podcastsByFeedId(feedId: Number)`
     -   `podcastsByFeedItunesId(itunesId: Number)`
+    -   `podcastsByGUID(guid: Number)`
     -   `podcastsByTag()`
     -   `podcastsTrending(max: Number, since: Number, lang: String, cat: String, notcat: String)`
     -   `podcastsDead()`
@@ -66,12 +68,11 @@ Using Promise
 -   Value
     -   `valueByFeedUrl(feedUrl: String)`
     -   `valueByFeedId(feedId: Number)`
--   Stats
-    -   `statsCurrent()`
 -   Categories
     -   `categoriesList()`
 -   Notify Hub
-    -   `hubPubNotify(feedId: Number, update: Boolean)`
+    -   `hubPubNotifyById(feedId: Number)`
+    -   `hubPubNotifyByUrl(feedUrl: string)`
 -   Add
     -   `addByFeedUrl(feedUrl: String, chash: String, itunesId: Number)`
     -   `addByItunesId(itunesId: Number)`
