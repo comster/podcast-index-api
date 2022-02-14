@@ -9,6 +9,7 @@ const querystring = require('querystring')
 const BASE_API_URL = 'https://api.podcastindex.org/api/1.0/'
 
 const PATH_SEARCH_BY_TERM = 'search/byterm'
+const PATH_SEARCH_BY_TITLE = 'search/bytitle'
 const PATH_SEARCH_EPISODE_BY_PERSON = 'search/byperson'
 const PATH_ADD_BY_FEED_URL = 'add/byfeedurl'
 const PATH_ADD_BY_ITUNES_ID = 'add/byitunesid'
@@ -20,6 +21,7 @@ const PATH_EPISODES_RANDOM = 'episodes/random'
 const PATH_PODCASTS_BY_FEED_URL = 'podcasts/byfeedurl'
 const PATH_PODCASTS_BY_FEED_ID = 'podcasts/byfeedid'
 const PATH_PODCASTS_BY_ITUNES_ID = 'podcasts/byitunesid'
+const PATH_PODCASTS_BY_GUID = 'podcasts/byguid'
 const PATH_PODCASTS_BY_TAG = 'podcasts/bytag'
 const PATH_PODCASTS_TRENDING = 'podcasts/trending'
 const PATH_PODCASTS_DEAD = 'podcasts/dead'
@@ -29,7 +31,6 @@ const PATH_RECENT_NEWFEEDS = 'recent/newfeeds'
 const PATH_RECENT_SOUNDBITES = 'recent/soundbites'
 const PATH_VALUE_BY_FEED_ID = 'value/byfeedid'
 const PATH_VALUE_BY_FEED_URL = 'value/byfeedurl'
-const PATH_STATS_CURRENT = 'stats/current'
 const PATH_CATEGORIES_LIST = 'categories/list'
 const PATH_HUB_PUBNOTIFIY = 'hub/pubnotify'
 
@@ -103,6 +104,15 @@ module.exports = (key, secret, userAgent) => {
             if (fullText) queries['fullText'] = ''
             return custom(PATH_SEARCH_BY_TERM, queries)
         },
+        searchByTitle: async (q, val = '', clean = false, fullText = false) => {
+            let queries = {
+                q: q,
+            }
+            if (val !== '') queries['val'] = val
+            if (clean) queries['clean'] = ''
+            if (fullText) queries['fullText'] = ''
+            return custom(PATH_SEARCH_BY_TITLE, queries)
+        },
         searchEpisodesByPerson: async (q, fullText = false) => {
             let queries = {
                 q: q,
@@ -119,6 +129,9 @@ module.exports = (key, secret, userAgent) => {
         },
         podcastsByFeedItunesId: async (itunesId) => {
             return custom(PATH_PODCASTS_BY_ITUNES_ID, { id: itunesId })
+        },
+        podcastsByGUID: async (guid) => {
+            return custom(PATH_PODCASTS_BY_GUID, { guid: guid })
         },
         podcastsByTag: async () => {
             return custom(PATH_PODCASTS_BY_TAG, { 'podcast-value': '' })
@@ -271,19 +284,20 @@ module.exports = (key, secret, userAgent) => {
             })
         },
 
-        statsCurrent: async () => {
-            return custom(PATH_STATS_CURRENT)
-        },
-
         categoriesList: async () => {
             return custom(PATH_CATEGORIES_LIST)
         },
 
-        hubPubNotify: async (feedId, update = true) => {
+        hubPubNotifyById: async (feedId) => {
             let queries = {
                 id: feedId,
             }
-            if (update) queries['update'] = ''
+            return custom(PATH_HUB_PUBNOTIFIY, queries)
+        },
+        hubPubNotifyByUrl: async (feedUrl) => {
+            let queries = {
+                url: feedUrl,
+            }
             return custom(PATH_HUB_PUBNOTIFIY, queries)
         },
     }

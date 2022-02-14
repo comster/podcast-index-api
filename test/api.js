@@ -7,7 +7,7 @@ const api = lib(
 )
 const apiBadCreds = lib('ABC', '123')
 
-const SEARCH_TERM = 'Joe Rogan Experience'
+const SEARCH_TERM = 'The Joe Rogan Experience'
 const SEARCH_PERSON = 'Joe Rogan'
 const FEED_ID = 550168
 const FEED_ID_VALUE = 920666
@@ -20,6 +20,7 @@ const EPISODE_ID = 16795090
 const RECENT_FEEDS_COUNT = 3
 const RECENT_EPISODES_COUNT = 3
 const RECENT_EPISODES_EXCLUDE = 'news'
+const FEED_GUID = '9d783600-a77f-5c77-9042-0d9f3280465e'
 
 it('Requires API credentials', () => {
     expect(() => {
@@ -71,6 +72,17 @@ it('Search by term (value)', async () => {
     expect(results).toHaveProperty('feeds')
     // expect(results.feeds[0].id).toEqual(FEED_ID)
     // expect(results.feeds[0].title).toEqual(FEED_TITLE)
+})
+
+it('Search by title', async () => {
+    expect.assertions(6)
+    const results = await api.searchByTitle(FEED_TITLE)
+    expect(results.status).toEqual('true')
+    expect(results.feeds.length).toBeGreaterThan(0)
+    expect(results).toHaveProperty('query', FEED_TITLE)
+    expect(results).toHaveProperty('feeds')
+    expect(results.feeds[0].id).toEqual(FEED_ID)
+    expect(results.feeds[0].title).toEqual(FEED_TITLE)
 })
 
 it('Search episodes by person', async () => {
@@ -164,6 +176,14 @@ it('Podcasts By Feed iTunes ID', async () => {
     expect.assertions(3)
     const results = await api.podcastsByFeedItunesId(FEED_ITUNES_ID)
     expect(results).toHaveProperty('query.id', FEED_ITUNES_ID.toString())
+    expect(results.feed.id).toEqual(FEED_ID)
+    expect(results.feed.itunesId).toEqual(FEED_ITUNES_ID)
+})
+
+it('Podcasts By GUID', async () => {
+    expect.assertions(3)
+    const results = await api.podcastsByGUID(FEED_GUID)
+    expect(results).toHaveProperty('query.id', FEED_ID)
     expect(results.feed.id).toEqual(FEED_ID)
     expect(results.feed.itunesId).toEqual(FEED_ITUNES_ID)
 })
@@ -265,13 +285,6 @@ it('Value By Feed ID', async () => {
     const results = await api.valueByFeedId(FEED_ID_VALUE)
     expect(results).toHaveProperty('query.id', FEED_ID_VALUE.toString())
     expect(results).toHaveProperty('value')
-})
-
-it('Stats Current', async () => {
-    expect.assertions(2)
-    const results = await api.statsCurrent()
-    expect(results).toHaveProperty('status', 'true')
-    expect(results.stats).toHaveProperty('feedCountTotal')
 })
 
 it('Categories list', async () => {
