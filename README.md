@@ -24,7 +24,7 @@ Description of API endpoints, arguments and returned data: https://podcastindex-
 
 Require the lib from your javascript file
 
-`const api = require('podcast-index-api')("YOUR_API_KEY_HERE", "YOUR_API_SECRET_HERE")`
+`const api = require('podcast-index-api')("YOUR_API_KEY_HERE", "YOUR_API_SECRET_HERE", "CUSTOM_USER_AGENT_HERE")`
 
 ## Usage
 
