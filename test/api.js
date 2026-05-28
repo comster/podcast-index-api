@@ -1,11 +1,13 @@
 jest.setTimeout(10000)
 
 const lib = require('../index.js')
+const USER_AGENT = 'podcast-index-api/test'
 const api = lib(
     process.env.PODCASTINDEX_API_KEY,
-    process.env.PODCASTINDEX_API_SECRET
+    process.env.PODCASTINDEX_API_SECRET,
+    USER_AGENT,
 )
-const apiBadCreds = lib('ABC', '123')
+const apiBadCreds = lib('ABC', '123', USER_AGENT)
 
 const SEARCH_TERM = 'The Joe Rogan Experience'
 const SEARCH_PERSON = 'Joe Rogan'
@@ -243,19 +245,19 @@ it('Recent Episodes', async () => {
     expect.assertions(6)
     const results = await api.recentEpisodes(
         RECENT_EPISODES_COUNT,
-        RECENT_EPISODES_EXCLUDE
+        RECENT_EPISODES_EXCLUDE,
     )
     expect(results).toHaveProperty('count', RECENT_EPISODES_COUNT)
     expect(results).toHaveProperty('max', RECENT_EPISODES_COUNT.toString())
     expect(results.items.length).toEqual(RECENT_EPISODES_COUNT)
     expect(results.items[0].title).toEqual(
-        expect.not.stringContaining(RECENT_EPISODES_EXCLUDE)
+        expect.not.stringContaining(RECENT_EPISODES_EXCLUDE),
     )
     expect(results.items[1].title).toEqual(
-        expect.not.stringContaining(RECENT_EPISODES_EXCLUDE)
+        expect.not.stringContaining(RECENT_EPISODES_EXCLUDE),
     )
     expect(results.items[2].title).toEqual(
-        expect.not.stringContaining(RECENT_EPISODES_EXCLUDE)
+        expect.not.stringContaining(RECENT_EPISODES_EXCLUDE),
     )
 })
 

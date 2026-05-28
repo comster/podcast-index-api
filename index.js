@@ -1,4 +1,3 @@
-const got = require('got')
 const crypto = require('crypto')
 const querystring = require('querystring')
 
@@ -58,33 +57,38 @@ const withResponse = (response) => {
 }
 
 module.exports = (key, secret, userAgent) => {
-    if (!key || !secret) {
+    // A User-Agent is required: the API rejects requests with a missing or
+    // generic/sample User-Agent, so callers must supply their own.
+    if (!key || !secret || !userAgent) {
         throw new Error(
-            'API Key and Secret are required from https://api.podcastindex.org/'
+            'API Key, Secret, and User-Agent are required from https://api.podcastindex.org/',
         )
     }
 
-    const api = got.extend({
-        responseType: 'json',
-        prefixUrl: BASE_API_URL,
-        throwHttpErrors: false,
-        hooks: {
-            beforeRequest: [
-                (options) => {
-                    let dt = new Date().getTime() / 1000
-                    options.headers['User-Agent'] =
-                        userAgent ||
-                        'PodcastIndexBot/@podcast@noagendasocial.com'
-                    options.headers['X-Auth-Date'] = dt
-                    options.headers['X-Auth-Key'] = key
-                    options.headers['Authorization'] = crypto
-                        .createHash('sha1')
-                        .update(key + secret + dt)
-                        .digest('hex')
-                },
-            ],
-        },
-    })
+    // Signed request against the API using the built-in fetch (Node >=22).
+    // Returns { statusCode, body } so withResponse() can stay unchanged.
+    const api = async (path) => {
+        const dt = new Date().getTime() / 1000
+        const response = await fetch(BASE_API_URL + path, {
+            headers: {
+                'User-Agent': userAgent,
+                'X-Auth-Date': String(dt),
+                'X-Auth-Key': key,
+                Authorization: crypto
+                    .createHash('sha1')
+                    .update(key + secret + dt)
+                    .digest('hex'),
+            },
+        })
+        // Auth/WAF errors come back as plain text or HTML, so fall back to a
+        // predictable { message, code } error when the body isn't JSON.
+        const text = await response.text()
+        try {
+            return { statusCode: response.status, body: JSON.parse(text) }
+        } catch (err) {
+            throw { message: text || 'Request failed.', code: response.status }
+        }
+    }
 
     const custom = async (path, queries) => {
         const response = await api(path + qs(queries))
@@ -141,7 +145,7 @@ module.exports = (key, secret, userAgent) => {
             since = null,
             lang = null,
             cat = null,
-            notcat = null
+            notcat = null,
         ) => {
             return custom(PATH_PODCASTS_TRENDING, {
                 max: max,
@@ -170,7 +174,7 @@ module.exports = (key, secret, userAgent) => {
             feedId,
             since = null,
             max = 10,
-            fullText = false
+            fullText = false,
         ) => {
             let queries = {
                 id: feedId,
@@ -184,7 +188,7 @@ module.exports = (key, secret, userAgent) => {
             feedUrl,
             since = null,
             max = 10,
-            fullText = false
+            fullText = false,
         ) => {
             let queries = {
                 url: feedUrl,
@@ -198,7 +202,7 @@ module.exports = (key, secret, userAgent) => {
             itunesId,
             since = null,
             max = 10,
-            fullText = false
+            fullText = false,
         ) => {
             let queries = {
                 id: itunesId,
@@ -220,7 +224,7 @@ module.exports = (key, secret, userAgent) => {
             lang = null,
             cat = null,
             notcat = null,
-            fullText = false
+            fullText = false,
         ) => {
             let queries = {
                 max: max,
@@ -237,7 +241,7 @@ module.exports = (key, secret, userAgent) => {
             since = null,
             cat = null,
             lang = null,
-            notcat = null
+            notcat = null,
         ) => {
             return custom(PATH_RECENT_FEEDS, {
                 max: max,
@@ -251,7 +255,7 @@ module.exports = (key, secret, userAgent) => {
             max = 10,
             excludeString = null,
             before = null,
-            fullText = false
+            fullText = false,
         ) => {
             let queries = {
                 max: max,
