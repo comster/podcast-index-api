@@ -1,10 +1,20 @@
 {
     "name": "podcast-index-api",
     "version": "2.0.0",
-    "description": "JS lib for the Podcast Index API",
+    "description": "Lightweight, zero-dependency Node.js client for the Podcast Index API.",
     "main": "index.js",
+    "types": "index.d.ts",
+    "exports": {
+        ".": {
+            "types": "./index.d.ts",
+            "default": "./index.js"
+        },
+        "./package.json": "./package.json"
+    },
     "files": [
-        "index.js"
+        "index.js",
+        "index.d.ts",
+        "CHANGELOG.md"
     ],
     "engines": {
         "node": ">=22"
@@ -20,6 +30,7 @@
     "scripts": {
         "test": "jest --coverage",
         "format": "npx prettier --write .",
+        "format:check": "npx prettier --check .",
         "tag": "npm version patch && git push && git push --tags"
     },
     "repository": {
