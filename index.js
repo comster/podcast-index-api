@@ -5,6 +5,17 @@ const querystring = require('querystring')
 // API docs: https://podcastindex-org.github.io/docs-api/#get-/search/byterm
 //
 
+// Error thrown for a failed API request. Carries the HTTP `code` and, when the
+// server returned a JSON error payload, the parsed `body`.
+class PodcastIndexError extends Error {
+    constructor(message, code, body) {
+        super(message)
+        this.name = 'PodcastIndexError'
+        this.code = code
+        this.body = body
+    }
+}
+
 const BASE_API_URL = 'https://api.podcastindex.org/api/1.0/'
 
 const PATH_SEARCH_BY_TERM = 'search/byterm'
@@ -33,27 +44,31 @@ const PATH_VALUE_BY_FEED_URL = 'value/byfeedurl'
 const PATH_CATEGORIES_LIST = 'categories/list'
 const PATH_HUB_PUBNOTIFIY = 'hub/pubnotify'
 
-const qs = (o) => '?' + querystring.stringify(o)
+const qs = (o) => {
+    // Drop null/undefined values (callers pass them for unset optional params)
+    // but keep empty strings, which the API uses as presence flags (fullText).
+    const params = {}
+    for (const [k, v] of Object.entries(o || {})) {
+        if (v !== null && v !== undefined) params[k] = v
+    }
+    return '?' + querystring.stringify(params)
+}
 
 const withResponse = (response) => {
-    // Check for success or failure and create a predictable error response
-    let body = response.body
-    // if response.statusCode == 200?
+    // Check for success or failure and surface a predictable error
+    const body = response.body
     if (
         response.statusCode === 500 ||
         (body.hasOwnProperty('status') && body.status === 'false')
     ) {
-        // Failed
-        if (body.hasOwnProperty('description')) {
-            // Error message from server API
-            throw { message: body.description, code: response.statusCode }
-        } else {
-            throw { message: 'Request failed.', code: response.statusCode }
-        }
-    } else {
-        // Succcess // 200
-        return body
+        // Use the server's error description when present
+        const message = body.hasOwnProperty('description')
+            ? body.description
+            : 'Request failed.'
+        throw new PodcastIndexError(message, response.statusCode, body)
     }
+    // Success // 200
+    return body
 }
 
 module.exports = (key, secret, userAgent) => {
@@ -86,7 +101,10 @@ module.exports = (key, secret, userAgent) => {
         try {
             return { statusCode: response.status, body: JSON.parse(text) }
         } catch (err) {
-            throw { message: text || 'Request failed.', code: response.status }
+            throw new PodcastIndexError(
+                text || 'Request failed.',
+                response.status,
+            )
         }
     }
 
@@ -306,3 +324,6 @@ module.exports = (key, secret, userAgent) => {
         },
     }
 }
+
+// Exposed so consumers can do `catch (e) { if (e instanceof PodcastIndexError) ... }`
+module.exports.PodcastIndexError = PodcastIndexError
