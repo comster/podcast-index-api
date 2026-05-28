@@ -130,7 +130,8 @@ it('Episodes By Feed iTunes ID', async () => {
     expect.assertions(3)
     const results = await api.episodesByItunesId(FEED_ITUNES_ID)
     expect(results.items.length).toBeGreaterThan(0)
-    expect(results).toHaveProperty('query', FEED_ITUNES_ID.toString())
+    // iTunes-ID lookups echo the query id back as a number (feed-ID lookups return a string)
+    expect(results).toHaveProperty('query', FEED_ITUNES_ID)
     expect(results.items[0].feedId).toEqual(FEED_ID)
 })
 
@@ -177,7 +178,8 @@ it('Podcasts By Feed ID', async () => {
 it('Podcasts By Feed iTunes ID', async () => {
     expect.assertions(3)
     const results = await api.podcastsByFeedItunesId(FEED_ITUNES_ID)
-    expect(results).toHaveProperty('query.id', FEED_ITUNES_ID.toString())
+    // iTunes-ID lookups echo the query id back as a number (feed-ID lookups return a string)
+    expect(results).toHaveProperty('query.id', FEED_ITUNES_ID)
     expect(results.feed.id).toEqual(FEED_ID)
     expect(results.feed.itunesId).toEqual(FEED_ITUNES_ID)
 })
@@ -264,7 +266,8 @@ it('Recent Episodes', async () => {
 it('Recent New Feeds', async () => {
     expect.assertions(1)
     const results = await api.recentNewFeeds()
-    expect(results).toHaveProperty('status', 'true')
+    // recent/newfeeds returns status as a boolean, unlike other endpoints
+    expect(results).toHaveProperty('status', true)
 })
 
 it('Recent soundbites', async () => {
