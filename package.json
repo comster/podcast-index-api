@@ -31,11 +31,12 @@
         "test": "jest --coverage",
         "format": "npx prettier --write .",
         "format:check": "npx prettier --check .",
+        "prepublishOnly": "npm run format:check && npm test",
         "tag": "npm version patch && git push && git push --tags"
     },
     "repository": {
         "type": "git",
-        "url": "git+ssh://git@github.com/comster/podcast-index-api.git"
+        "url": "git+https://github.com/comster/podcast-index-api.git"
     },
     "keywords": [
         "API",
