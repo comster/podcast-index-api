@@ -46,6 +46,19 @@ main().catch(console.error)
 
 All three constructor arguments are **required**; the factory throws if any is missing.
 
+### ESM / `import`
+
+The package is CommonJS, but it works from ES modules (and TypeScript) via a default import:
+
+```js
+import podcastIndexApi from 'podcast-index-api'
+
+const api = podcastIndexApi(key, secret, userAgent)
+
+// the error class is available on the default import:
+const { PodcastIndexError } = podcastIndexApi
+```
+
 ## Usage
 
 Every method returns a `Promise` that resolves to the parsed JSON response.
@@ -99,7 +112,8 @@ try {
 Type declarations ship with the package (`index.d.ts`) — no `@types` package needed. You get autocomplete for every method and its parameters out of the box.
 
 ```ts
-import podcastIndexApi = require('podcast-index-api')
+import podcastIndexApi from 'podcast-index-api' // needs esModuleInterop
+// or: import podcastIndexApi = require('podcast-index-api')
 
 const api = podcastIndexApi(key, secret, userAgent)
 ```
